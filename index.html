@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>TV Maze</title>
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/water.css@2/out/water.min.css"
+    />
+    <style>
+      .text-right {
+        text-align: right;
+      }
+    </style>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js" defer></script>
+    <script src="app.js" defer></script>
+  </head>
+  <body>
+    <div id="app">
+      <h1>TV Maze</h1>
+
+      <p v-if="error" style="color: red; font-weight: bold">😡 {{ error }}</p>
+
+      <form @submit.prevent="search">
+        <input type="text" placeholder="Série..." autofocus v-model="q" />
+        <button type="submit">Recherche</button>
+      </form>
+
+      <div v-for="show in shows">
+        <h2>{{ show.show.name }}</h2>
+
+        <h3>
+          ⭐️ {{ show.show.rating.average ? show.show.rating.average : "-" }}
+          <mark v-if="show.show.ended">Ended</mark>
+        </h3>
+
+        <p><strong>Genres :</strong> {{ show.show.genres.join(", ") }}</p>
+
+        <img
+          v-if="show.show.image"
+          :src="show.show.image.medium"
+          :alt="show.show.name"
+        />
+
+        <div v-html="show.show.summary"></div>
+
+        <table>
+          <tbody>
+            <tr>
+              <th>Average runtime</th>
+              <td class="text-right">{{ show.show.averageRuntime }} min</td>
+            </tr>
+            <tr>
+              <th>Premiered</th>
+              <td class="text-right">{{ show.show.premiered }}</td>
+            </tr>
+            <tr>
+              <th>Ended</th>
+              <td class="text-right">{{ show.show.ended }}</td>
+            </tr>
+            <tr>
+              <th>Website</th>
+              <td class="text-right">
+                <a :href="show.show.officialSite">Official website</a>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </body>
+</html>
