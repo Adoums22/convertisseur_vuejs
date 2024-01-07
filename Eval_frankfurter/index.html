@@ -1,0 +1,37 @@
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>TV Maze</title>
+        <link
+          rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/water.css@2/out/water.min.css"
+        />
+        <script src="https://unpkg.com/vue@3/dist/vue.global.js" defer></script>
+        <script src="app.js" defer></script>
+      </head>
+<body>
+    <div id="app" class="container">
+        <p v-if="error" class="error">😡 {{ error }}</p>
+        
+        <form @submit.prevent="search" class="form">
+            <input type="number" placeholder="Montant..." autofocus v-model.number="amount" class="input">
+            <select v-model="from" class="select">
+                <option v-for="currencyKey in Object.keys(currencies)" :value="currencyKey" :key="currencyKey">
+                    {{ currencies[currencyKey] }}
+                </option>
+              </select>
+              <select v-model="to" class="select">
+                <option v-for="currencyKey in Object.keys(currencies)" :value="currencyKey" :key="currencyKey">
+                    {{ currencies[currencyKey] }}
+                </option>
+              </select>
+            <button type="submit" class="btn">Convertir</button>
+          </form>
+        <div class="result" v-if="shows">
+          <p>{{ amount }} {{ from }} = {{ shows.rates[to]}} {{ to }}</p>
+        </div>
+      </div>
+    </div>
+</body>
+</html>
