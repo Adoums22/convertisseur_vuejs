@@ -1,37 +1,118 @@
+<!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="UTF-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>TV Maze</title>
-        <link
-          rel="stylesheet"
-          href="https://cdn.jsdelivr.net/npm/water.css@2/out/water.min.css"
-        />
-        <script src="https://unpkg.com/vue@3/dist/vue.global.js" defer></script>
-        <script src="app.js" defer></script>
-      </head>
-<body>
-    <div id="app" class="container">
-        <p v-if="error" class="error">😡 {{ error }}</p>
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Convertisseur de devises</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/water.css@2/out/water.min.css" />
+    <script src="https://kit.fontawesome.com/3edf1995a6.js" crossorigin="anonymous"></script>
+    <style>
+        body {
+            background-color: #f0f0f0;
+        }
+
+        .container {
+            max-width: 750px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        .form {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .form-row {
+            display: flex;
+            flex-wrap: wrap; 
+            justify-content: space-between;
+            margin-bottom: 16px;
+        }
+
+        .input,
+        .select,
+        .btn {
+            flex-basis: calc(33.33% - 10px);
+            margin-bottom: 10px;
+            box-sizing: border-box;
+        }
+
+        .btn {
+            background-color: #3498db;
+            color: #fff;
+            cursor: pointer;
+        }
+
+        .btn:hover {
+            background-color: #2980b9;
+        }
+
+        .result {
+            margin-top: 20px;
+            font-size: 18px;
+        }
+
+        .error {
+            font-size: 16px;
+            margin-top: 10px;
+        }
+
         
+        @media screen and (max-width: 600px) {
+            .input,
+            .select,
+            .btn {
+                flex-basis: 100%; 
+            }
+        }
+    </style>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js" defer></script>
+    <script src="app.js" defer></script>
+</head>
+<body class="water">
+    <div id="app" class="container mt-4">
+        <h1 class="title">Convertisseur de devises</h1>
+        <p v-if="error" class="error text-danger">😡 {{ error }}</p>
+
         <form @submit.prevent="search" class="form">
-            <input type="number" placeholder="Montant..." autofocus v-model.number="amount" class="input">
-            <select v-model="from" class="select">
-                <option v-for="currencyKey in Object.keys(currencies)" :value="currencyKey" :key="currencyKey">
-                    {{ currencies[currencyKey] }}
-                </option>
-              </select>
-              <select v-model="to" class="select">
-                <option v-for="currencyKey in Object.keys(currencies)" :value="currencyKey" :key="currencyKey">
-                    {{ currencies[currencyKey] }}
-                </option>
-              </select>
-            <button type="submit" class="btn">Convertir</button>
-          </form>
-        <div class="result" v-if="shows">
-          <p>{{ amount }} {{ from }} = {{ shows.rates[to]}} {{ to }}</p>
+          <div class="form-row">
+              <div>
+                  <h2>Montant</h2>
+                  <input type="text" placeholder="Montant..." autofocus v-model.number="amount" class="input">
+              </div>
+              <div>
+                  <h2>De</h2>
+                  <select v-model="from" class="select">
+                      <option v-for="currencyKey in Object.keys(currencies)" :value="currencyKey" :key="currencyKey">
+                          {{ currencies[currencyKey] }}
+                      </option>
+                  </select>
+              </div>
+              <button @click="swapCurrencies" class="btn_secondary btn-secondary">
+                <i class="fas fa-exchange-alt"></i>
+            </button>
+              <div>
+                  <h2>Vers</h2>
+                  <select v-model="to" class="select">
+                      <option v-for="currencyKey in Object.keys(currencies)" :value="currencyKey" :key="currencyKey">
+                          {{ currencies[currencyKey] }}
+                      </option>
+                  </select>
+              </div>
+              <button type="submit" class="btn btn-primary">Convertir</button>
+          </div>
+      </form>      
+
+        <div class="result mt-4" v-if="shows">
+            <p v-if="amount >= 0">{{ amount }} {{ from }} = {{ shows.rates[to] }} {{ to }}</p>
+            <p v-else style="color: red;">Le montant ne peut pas être négatif.</p>
         </div>
-      </div>
     </div>
 </body>
 </html>
